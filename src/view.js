@@ -109,12 +109,15 @@ export default function view(ctrl, g) {
 
     const { vx, vy } = paddle;
 
-    g.fillRect(x, y, x + w, y + h, 5);
+    const off = 15,
+          on = 12;
+
+    g.fillRect(x, y, x + w, y + h, off);
 
     if (vx === 1) {
-      g.fillRect(x, y, x + w, y + h, 6);
+      g.fillRect(x, y, x + w, y + h, on);
     } if (vy === 1) {
-      g.fillRect(x, y, x + w, y + h, 6);
+      g.fillRect(x, y, x + w, y + h, on);
     }
 
   }
