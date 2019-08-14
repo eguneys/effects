@@ -37,7 +37,7 @@ export default function paddles(ctrl, g) {
     });
 
     if (hitPaddle) {
-      ctrl.paddleHit();
+      // ctrl.paddleHit();
     }
 
   };

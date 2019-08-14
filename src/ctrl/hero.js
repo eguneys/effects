@@ -5,26 +5,34 @@ export default function hero(ctrl) {
 
   const hero = ctrl.data.hero;
 
-  this.update = delta => {
-    hero.x += hero.vx * hero.boost;
-    hero.y += hero.vy * hero.boost;
+  const updatePos = delta => {
+    hero.x += hero.vx * hero.boost * delta * 0.1;
+    hero.y += hero.vy * hero.boost * delta * 0.1;
 
     if (hero.x < 0) {
       hero.x = 0;
       hero.vx *= -1;
+      hero.edge = 'left';
     }
     if (hero.y < 0) {
       hero.y = 0;
       hero.vy *= -1;
+      hero.edge = 'up';
     }
     if (hero.x >= width) {
       hero.x = width;
       hero.vx *= -1;
+      hero.edge = 'right';
     }
     if (hero.y >= height) {
       hero.y = height;
       hero.vy *= -1;
+      hero.edge = 'down';
     }
+  };
+
+  this.update = delta => {
+    updatePos(delta);
   };
 
   this.boost = boost => {

@@ -21,6 +21,8 @@ export default function view(ctrl, g) {
 
     over.render(ctrl);
 
+    renderDebug(ctrl, g);
+
     flush(ctrl, g);
   };
 
@@ -30,6 +32,14 @@ export default function view(ctrl, g) {
     g.spr();
 
     g.renderSource = b.Ui;
+    g.renderTarget = b.Screen;
+    g.spr();
+
+    g.renderSource = b.Midground;
+    g.renderTarget = b.Screen;
+    g.spr();
+
+    g.renderSource = b.Foreground;
     g.renderTarget = b.Screen;
     g.spr();
   }
@@ -43,14 +53,53 @@ export default function view(ctrl, g) {
     g.clear(0);
   }
 
+  function renderDebug(ctrl, g) {
+    g.renderTarget = b.Foreground;
+    const w = 8;
+
+    for (let i = 0; i < 64; i++) {
+      const x = Math.floor(i / 32) * w * 4 + width * 0.2,
+            y = (i % 32) * w;
+      g.fillRect(x, y, x + w, y + w, i);
+      text({
+        x: x - w,
+        y: y,
+        hspacing: 1,
+        text: i + '',
+        color: i
+      }, g);
+    }
+  }
+
   function renderPlay(ctrl, g) {
     ctrl = ctrl.play;
+
+    renderEdges(ctrl, g);
 
     ctrl.data.paddles.forEach(_ => renderPaddle(ctrl, _, g));
     ctrl.blocks.each(_ => renderBlock(_, g));
     renderHero(ctrl, g);
 
     renderUi(ctrl, g);
+  }
+
+  function renderEdges(ctrl, g) {
+    const off = 41;
+    const on = 38;
+
+    const edge = ctrl.data.hero.edge;
+
+    const left = edge==='left'?on:off;
+    const right = edge==='right'?on:off;
+    const up = edge==='up'?on:off;
+    const down = edge==='down'?on:off;
+
+    g.renderTarget = b.Screen;
+
+    g.line(0, 0, width, 0, up);
+    g.line(0, 0, 0, height, left);
+    g.line(0, height - 1, width, height -1, down);
+    g.line(width - 1, 0, width - 1, height, right);
   }
 
   function renderPaddle(ctrl, paddle, g) {
@@ -82,6 +131,8 @@ export default function view(ctrl, g) {
     g.renderTarget = b.Collision;
     const { x, y, radius, color } = ctrl.data.hero;
     g.fillCircle(x, y, radius, color);
+
+    g.renderTarget = b.Midground;
   }
 
   function renderUi(ctrl, g) {
@@ -91,16 +142,16 @@ export default function view(ctrl, g) {
       x: width * 0.1,
       y: 10,
       text: 'score',
-      color: 7,
-      scale: 2
+      color: 48,
+      scale: 1
     }, g);
 
     text({
       x: scoreLabel.ex + 20,
       y: 10,
       text: score,
-      color: 10,
-      scale: 3
+      color: 48,
+      scale: 1
     }, g);    
   }
 
