@@ -8,8 +8,8 @@ export default function paddles(ctrl, g) {
   const paddles = ctrl.data.paddles;
 
   const updatePaddle = paddle => delta => {
-    paddle.x += paddle.vx;
-    paddle.y += paddle.vy;
+    paddle.x += paddle.vx * ctrl.data.paddleBoost[0];
+    paddle.y += paddle.vy * ctrl.data.paddleBoost[1];
 
     if (paddle.x > width - paddle.w) {
       paddle.x = width - paddle.w;

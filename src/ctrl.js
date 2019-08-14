@@ -32,10 +32,31 @@ export default function ctrl(state, g) {
     if (this.data.state === u.States.Play) {
       this.play.boost();
     } else {
-      u.ensureDelay(this.data.gameover, () => {
+      if (this.data.gameover) {
+        u.ensureDelay(this.data.gameover, () => {
+          this.shouldResetGame = true;
+        });
+      } else {
         this.shouldResetGame = true;
-      });
+      }
     }
+  };
+
+  this.pressKey = key => {
+    switch (key) {
+    case 'up':
+      this.play.paddleMove([0, -1]);
+      break;
+    case 'down':
+      this.play.paddleMove([0, 1]);
+      break;
+    case 'left':
+      this.play.paddleMove([-1, 0]);
+      break;
+    case 'right':
+      this.play.paddleMove([1, 0]);
+      break;
+    };
   };
 
   this.update = delta => {

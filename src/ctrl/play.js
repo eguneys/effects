@@ -83,6 +83,21 @@ export default function ctrl(state, g) {
     this.data.state = u.States.Over;
   };
 
+  this.paddleMove = v => {
+    console.log(v);
+    if (v[0] === 0) {
+      this.data.paddleBoost[0] = 1;
+    } else {
+      this.data.paddleBoost[0] = v[0] * 2;
+    }
+    if (v[1] === 0) {
+      this.data.paddleBoost[1] = 1;
+    } else {
+      this.data.paddleBoost[1] = v[1] * 2;
+    }
+    
+  };
+
 
   this.update = delta => {
     maybeBoost(delta);

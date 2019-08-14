@@ -11,7 +11,7 @@ export default function defaults() {
   const paddleWidth = gameUnit;
 
   return {
-    state: u.States.Play,
+    state: u.States.Over,
     game: {
       score: 0,
       unit: gameUnit,
@@ -21,6 +21,7 @@ export default function defaults() {
       vx: 10,
       tick: 0
     },
+    paddleBoost: [1, 1],
     paddles: [
       {
         vx: 1,

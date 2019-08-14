@@ -58,7 +58,15 @@ export default function view(ctrl, g) {
     g.renderTarget = b.Collision;
     const { x, y, w, h } = paddle;
 
+    const { vx, vy } = paddle;
+
     g.fillRect(x, y, x + w, y + h, 5);
+
+    if (vx === 1) {
+      g.fillRect(x, y, x + w, y + h, 6);
+    } if (vy === 1) {
+      g.fillRect(x, y, x + w, y + h, 6);
+    }
 
   }
 
@@ -73,7 +81,6 @@ export default function view(ctrl, g) {
   function renderHero(ctrl, g) {
     g.renderTarget = b.Collision;
     const { x, y, radius, color } = ctrl.data.hero;
-    console.log(x, y);
     g.fillCircle(x, y, radius, color);
   }
 

@@ -22,6 +22,18 @@ function startMove(ctrl) {
     case 'Space':
       ctrl.spaceHit();
       break;
+    case 'ArrowUp':
+      ctrl.pressKey('up');
+      break;
+    case 'ArrowDown':
+      ctrl.pressKey('down');
+      break;
+    case 'ArrowLeft':
+      ctrl.pressKey('left');
+      break;
+    case 'ArrowRight':
+      ctrl.pressKey('right');
+      break;
     default:
       return;
     }
