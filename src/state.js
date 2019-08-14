@@ -2,8 +2,8 @@ import * as u from './util';
 
 export default function defaults() {
 
-  const width = 256,
-        height = 256,
+  const height = 256,
+        width = height * 1.5,
         ratio = height / width;
 
   const gameUnit = 40;
@@ -17,6 +17,40 @@ export default function defaults() {
       vx: 10,
       tick: 0
     },
+    paddles: [
+      {
+        vx: 1,
+        vy: 0,
+        x: width / 2,
+        y: 0,
+        w: gameUnit,
+        h: 10
+      },
+      {
+        vx: -1,
+        vy: 0,
+        x: width / 2,
+        y: height - 10,
+        w: gameUnit,
+        h: 10
+      },
+      {
+        vx: 0,
+        vy: 1,
+        x: 0,
+        y: height / 2,
+        w: 10,
+        h: gameUnit
+      },
+      {
+        vx: 0,
+        vy: -1,
+        x: width - 11,
+        y: height / 2,
+        w: 10,
+        h: gameUnit
+      }
+    ],
     hero: {
       color: u.HERO_COLOR,
       radius: gameUnit / 4,

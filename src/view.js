@@ -13,6 +13,7 @@ export default function view(ctrl, g) {
   this.render = ctrl => {
     clear(ctrl, g);
     renderHero(ctrl, g);
+    ctrl.data.paddles.forEach(_ => renderPaddle(ctrl, _, g));
     ctrl.blocks.each(_ => renderBlock(_, g));
     flush(ctrl, g);
   };
@@ -30,6 +31,15 @@ export default function view(ctrl, g) {
     g.clear(0);
   }
 
+  function renderPaddle(ctrl, paddle, g) {
+    
+    g.renderTarget = b.Collision;
+    const { x, y, w, h } = paddle;
+
+    g.fillRect(x, y, x + w, y + h, 5);
+
+  }
+
   function renderBlock(ctrl, g) {
     g.renderTarget = b.Collision;
     const { x, y, angle, length, color } = ctrl.data;
@@ -42,8 +52,7 @@ export default function view(ctrl, g) {
     g.renderTarget = b.Collision;
     const { x, y, radius, color } = ctrl.data.hero;
 
-    g.circle(x, y, radius, color);
-
+    g.fillCircle(x, y, radius, color);
   }
 
 }

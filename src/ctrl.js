@@ -2,49 +2,18 @@ import * as u from './util';
 
 import Pool from './pool';
 
+import makeHero from './hero';
+import makePaddles from './paddle';
+
 export default function ctrl(state, g) {
   this.data = state;
   const { width, height } = this.data.game;
 
-  const hero = this.data.hero;
+  this.hero = new makeHero(this);
+
+  this.paddles = new makePaddles(this);
 
   this.blocks = new Pool(makeBlock, this);
-
-  const updateHero = delta => {
-    hero.x += hero.vx * hero.boost;
-    hero.y += hero.vy * hero.boost;
-
-    if (hero.x < 0) {
-      hero.x = 0;
-      hero.vx *= -1;
-    }
-    if (hero.y < 0) {
-      hero.y = 0;
-      hero.vy *= -1;
-    }
-    if (hero.x >= width) {
-      hero.x = width;
-      hero.vx *= -1;
-    }
-    if (hero.y >= height) {
-      hero.y = height;
-      hero.vy *= -1;
-    }
-  };
-
-
-  const heroChangeV = angle => {
-    const c = Math.cos(angle),
-          s = Math.sin(angle);
-
-    const lV = [c, s];
-    const hV = [-hero.vx, -hero.vy];
-
-    const nV = [hV[0] + lV[0], hV[1] + lV[1]];
-
-    hero.vx = u.clamp(nV[0], -1, 1);
-    hero.vy = u.clamp(nV[1], -1, 1);
-  };
 
   const updateGame = delta => {
     const game = this.data.game;
@@ -68,20 +37,21 @@ export default function ctrl(state, g) {
     if (hitBlock) {
       const { angle } = hitBlock.data;
 
-      heroChangeV(angle);
+      this.hero.changeV(angle);
 
       this.blocks.release(hitBlock);
     }
 
   };
 
-  const maybeBoost = withDelay(() => {
-    if (hero.boost > 1) {
-      hero.boost = 1;
+  const maybeBoost = () => {
+    if (this.userBoost) {
+      this.hero.boost(10);
+      this.userBoost = false;
     } else {
-      hero.boost = 2;
+      this.hero.boost(1);
     }
-  }, 1000);
+  };
 
   const maybeSpawnBlock = withDelay(() => {
     const length = 10;
@@ -94,6 +64,10 @@ export default function ctrl(state, g) {
 
   }, 1000);
 
+  this.boost = () => {
+    this.userBoost = true;
+  };
+
 
   this.update = delta => {
     maybeBoost(delta);
@@ -101,7 +75,8 @@ export default function ctrl(state, g) {
     updateCollision(delta);
 
     updateGame(delta);
-    updateHero(delta);
+    this.hero.update(delta);
+    this.paddles.update(delta);
     this.blocks.each(_ => _.update(delta));
   };
 }

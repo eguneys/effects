@@ -230,7 +230,7 @@ export default function Graphics(state, ctx) {
     } while (x < 0);
   };
 
-  const fillRect = (x1, y1, x2, y2, color) => {
+  this.fillRect = (x1, y1, x2, y2, color) => {
     let i = Math.abs(y2 - y1);
 
     this.line(x1, y1, x2, y1, color);
@@ -280,11 +280,11 @@ export default function Graphics(state, ctx) {
 
   this.render = () => {
 
-    let i = 0x10000;
+    let i = b.Effects;
 
     while (i--) {
       data[i] = colors[pal[ram[i]]];
-    }    
+    }
 
     imageData.data.set(buf8);
     ctx.putImageData(imageData, 0, 0);

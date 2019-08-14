@@ -5,6 +5,8 @@ import makeView from './view';
 import makeCtrl from './ctrl';
 import Loop from './loop';
 
+import * as events from './events';
+
 export function app(element, options) {
 
   const canvas = document.createElement('canvas');
@@ -28,6 +30,8 @@ export function app(element, options) {
   canvas.width = state.game.width;
   canvas.height = state.game.height;
   element.append(canvas);
+
+  events.bindDocument(ctrl);
 
   if (module.hot) {
     module.hot.accept('./ctrl', function() {
