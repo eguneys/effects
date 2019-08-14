@@ -1,154 +1,47 @@
 import * as u from './util';
 
-import Pool from './pool';
-
-import makeHero from './hero';
-import makePaddles from './paddle';
+import playCtrl from './ctrl/play';
+import overCtrl from './ctrl/over';
 
 export default function ctrl(state, g) {
   this.data = state;
-  const { width, height } = this.data.game;
 
-  this.hero = new makeHero(this);
+  this.play = new playCtrl(state, g);
 
-  this.paddles = new makePaddles(this);
+  this.over = new overCtrl(state, g);
 
-  this.blocks = new Pool(makeBlock, this);
-
-  const updateGame = delta => {
-    const game = this.data.game;
-
-    game.tick += delta;
-  };
-
-  const updateCollision = delta => {
-    
-    const hitBlock = this.blocks
-          .find(_ => {
-
-            if (_.life < 100) {
-              return false;
-            }
-
-            return collides(g,
-                            u.HERO_COLOR,
-                            lineCollisionRange(_.data));
-          });
-    if (hitBlock) {
-      const { angle } = hitBlock.data;
-
-      this.hero.changeV(angle);
-
-      this.blocks.release(hitBlock);
+  const maybeUpdateGame = delta => {
+    if (this.data.state === u.States.Play) {
+      this.play.update(delta);
     }
-
+    if (this.shouldResetGame) {
+      this.shouldResetGame = false;
+      this.play.reset();
+      this.data.gameover = 0;
+      this.data.state = u.States.Play;
+    }
   };
 
-  const maybeBoost = () => {
-    if (this.userBoost) {
-      this.hero.boost(10);
-      this.userBoost = false;
+  const maybeUpdateOver = delta => {
+    if (this.data.state === u.States.Over) {
+      this.over.update(delta);
+    }
+  };
+
+  this.spaceHit = () => {
+    if (this.data.state === u.States.Play) {
+      this.play.boost();
     } else {
-      this.hero.boost(1);
+      u.ensureDelay(this.data.gameover, () => {
+        this.shouldResetGame = true;
+      });
     }
-  };
-
-  const maybeSpawnBlock = withDelay(() => {
-    const length = 10;
-    this.blocks.create({
-      x: u.rand(length, width - length),
-      y: u.rand(length, height - length),
-      length,
-      angle: u.rand(0, u.TAU / 4 - u.TAU / 8) + u.TAU / 10
-    });
-
-  }, 1000);
-
-  this.boost = () => {
-    this.userBoost = true;
-  };
-
-
-  this.update = delta => {
-    maybeBoost(delta);
-    maybeSpawnBlock(delta);
-    updateCollision(delta);
-
-    updateGame(delta);
-    this.hero.update(delta);
-    this.paddles.update(delta);
-    this.blocks.each(_ => _.update(delta));
-  };
-}
-
-function makeBlock(ctrl) {
-
-  this.init = (d) => {
-    this.data = { ...defaults(), ...d };
-
-    this.life = 0;
-    
   };
 
   this.update = delta => {
-    this.life += delta;
-    
-    
+    maybeUpdateGame(delta);
+    maybeUpdateOver(delta);
+
   };
-
-  const defaults = () => ({
-    x: 0,
-    y: 0,
-    angle: u.THIRDTAU,
-    length: 100,
-    color: u.BLOCK_COLOR
-  });
-
+  
 }
-
-function collides(g, color, cr) {
-  return cr((x, y) => {
-    return g.pget(x, y, g.buffers.Collision) === color;
-  });
-}
-
-function circleCollisionRange({ x, y, radius }) {
-  return (collider) => {
-    for (let a = 0; a < u.TAU; a+= u.THIRDPI) {
-      const c = Math.cos(a) * radius,
-            s = Math.sin(a) * radius;
-      if (collider(x + c, y + s)); {
-        return true;
-      }
-    }
-    return false;
-  };
-}
-
-function lineCollisionRange({ x, y, angle, length }) {
-  return (collider) => {
-    for (let a = 0; a < length; a+=0.1) {
-      const c = Math.cos(angle) * a,
-            s = Math.sin(angle) * a;
-      if (collider(x + c, y + s)) {
-        return true;
-      }
-    }
-    return false;
-  };
-}
-
-const withDelay = (fn, delay, updateFn) => {
-  let lastUpdate = 0;
-
-  return (delta) => {
-    lastUpdate += delta;
-    if (lastUpdate >= delay) {
-      fn();
-      lastUpdate = 0;
-    } else {
-      if (updateFn)
-        updateFn(lastUpdate / delay);
-    }
-  };
-};

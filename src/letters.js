@@ -1,5 +1,18 @@
 export default function letters() {
   const res = {
+    '0': `
+.....
+.   .
+. . .
+.   .
+.....
+`, '1': `
+ ..
+. .
+  .
+  .
+....
+`,
     '-': `
 
 

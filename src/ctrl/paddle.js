@@ -1,4 +1,8 @@
-export default function paddles(ctrl) {
+import * as u from '../util';
+
+import { collides, rectCollisionRange } from '../collision';
+
+export default function paddles(ctrl, g) {
   const { width, height } = ctrl.data.game;
 
   const paddles = ctrl.data.paddles;
@@ -25,7 +29,21 @@ export default function paddles(ctrl) {
     }
   };
 
+  const updateCollision = delta => {
+    const hitPaddle = paddles.find(_ => {
+      return collides(g,
+                      u.HERO_COLOR,
+                      rectCollisionRange(_));
+    });
+
+    if (hitPaddle) {
+      ctrl.paddleHit();
+    }
+
+  };
+
   this.update = delta => {
+    updateCollision(delta);
     paddles.forEach(_ => updatePaddle(_)(delta));
   };
 

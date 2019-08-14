@@ -1,3 +1,8 @@
+export const States = {
+  Play: 'play',
+  Over: 'over'
+};
+
 export const HERO_COLOR = 3;
 export const BLOCK_COLOR = 4;
 
@@ -15,3 +20,11 @@ export function rand(min, max) {
 export function clamp(v, min, max) {
   return Math.min(Math.max(v, min), max);
 }
+
+export function now() { return Date.now(); }
+
+export const ensureDelay = (start, fn, delay = 1000) => {
+  if (now() - start > delay) {
+    fn();
+  }
+};

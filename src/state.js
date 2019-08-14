@@ -8,8 +8,12 @@ export default function defaults() {
 
   const gameUnit = 40;
 
+  const paddleWidth = gameUnit;
+
   return {
+    state: u.States.Play,
     game: {
+      score: 0,
       unit: gameUnit,
       width,
       height,
@@ -22,25 +26,25 @@ export default function defaults() {
         vx: 1,
         vy: 0,
         x: width / 2,
-        y: 0,
-        w: gameUnit,
+        y: 1,
+        w: paddleWidth,
         h: 10
       },
       {
         vx: -1,
         vy: 0,
         x: width / 2,
-        y: height - 10,
-        w: gameUnit,
+        y: height - 11,
+        w: paddleWidth,
         h: 10
       },
       {
         vx: 0,
         vy: 1,
-        x: 0,
+        x: 1,
         y: height / 2,
         w: 10,
-        h: gameUnit
+        h: paddleWidth
       },
       {
         vx: 0,
@@ -48,7 +52,7 @@ export default function defaults() {
         x: width - 11,
         y: height / 2,
         w: 10,
-        h: gameUnit
+        h: paddleWidth
       }
     ],
     hero: {

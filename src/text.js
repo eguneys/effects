@@ -46,6 +46,15 @@ export default function text(o, g) {
       ex = o.x + textWidth,
       ey = o.y + textHeight;
 
+  if (o.halign === 'center') {
+    sx = o.x - textWidth / 2;
+    ex = o.x + textWidth / 2;
+  }
+
+  if (o.valign === 'center') {
+    sy = o.y - textHeight / 2;
+    ey = o.y + textHeight / 2;
+  }
 
   let cx = sx + textWidth / 2,
       cy = sy + textHeight / 2;
@@ -56,6 +65,14 @@ export default function text(o, g) {
           lineWidth = (line.length * letterSize) + (line.length - 1) * o.hspacing,
           x = o.x,
           y = o.y + (letterSize + o.vspacing) * i;
+
+      if (o.halign === 'center') {
+        x = o.x - lineWidth / 2;
+      }
+
+      if (o.valign === 'center') {
+        y = y - textHeight / 2;
+      }
 
       textLine({
         x, y,
@@ -82,10 +99,10 @@ export default function text(o, g) {
 function defaults() {
   return {
     scale: 1,
-    hspacing: 1,
-    vspacing: 1,
-    halign: 'left',
-    valign: 'bottom',
+    hspacing: 2,
+    vspacing: 2,
+    halign: 'center',
+    valign: 'center',
     render: true
   };
 };

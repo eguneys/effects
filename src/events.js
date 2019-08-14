@@ -20,7 +20,7 @@ function startMove(ctrl) {
   return function(e) {
     switch(e.code) {
     case 'Space':
-      ctrl.boost();
+      ctrl.spaceHit();
       break;
     default:
       return;

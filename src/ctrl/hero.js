@@ -1,4 +1,4 @@
-import * as u from './util';
+import * as u from '../util';
 
 export default function hero(ctrl) {
   const { width, height } = ctrl.data.game;
