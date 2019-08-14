@@ -15,9 +15,8 @@ export function app(element, options) {
     ...defaults()
   };
 
-  let ctrl = new makeCtrl(state, ctx);
-
   let graphics = new Graphics(state, ctx);
+  let ctrl = new makeCtrl(state, graphics);
   let view = new makeView(ctrl, graphics);
 
   new Loop(delta => {
@@ -33,7 +32,7 @@ export function app(element, options) {
   if (module.hot) {
     module.hot.accept('./ctrl', function() {
       try {
-        ctrl = new makeCtrl(state, ctx);
+        ctrl = new makeCtrl(state, graphics);
       } catch (e) {
         console.log(e);
       }

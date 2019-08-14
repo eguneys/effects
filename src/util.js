@@ -1,3 +1,7 @@
+export const HERO_COLOR = 3;
+export const BLOCK_COLOR = 4;
+
+
 export const PI = Math.PI;
 export const HALFPI = PI / 2;
 export const THIRDPI = PI / 3;

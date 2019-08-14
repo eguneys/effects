@@ -28,4 +28,8 @@ export default function Pool(makeCtrl, parentCtrl) {
     this.alive.forEach(f);
   };
 
+  this.find = (p) => {
+    return this.alive.find(p);
+  };
+
 }

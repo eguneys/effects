@@ -5,7 +5,8 @@ export default function Graphics(state, ctx) {
   const halfw = width / 2,
         halfh = height / 2;
 
-  const pagesize = width * height;
+  const pages = 22,
+        pagesize = width * height;
 
   this.buffers = {
     Screen: 0,
@@ -106,7 +107,7 @@ export default function Graphics(state, ctx) {
   let buf8 = new Uint8ClampedArray(buf);
   let data = new Uint32Array(buf);
 
-  let ram = new Uint8ClampedArray(0x80000);
+  let ram = new Uint8ClampedArray(width * height * pages);
 
   this.clear = (color) => {
     ram.fill(color, this.renderTarget, this.renderTarget + pagesize);
@@ -119,7 +120,13 @@ export default function Graphics(state, ctx) {
     ram[this.renderTarget + y * width + x] = color;
   };
 
-  const spr = (sx = 0, sy = 0, sw = 16, sh = 16, x=0, y=0, flipx = false, flipy = false) => {
+  this.pget = (x, y, page) => {
+    x = u.clamp(x | 0, 0, width);
+    y = u.clamp(y | 0, 0, height);
+    return ram[page + y * width + x];
+  };
+
+  this.spr = (sx = 0, sy = 0, sw = width, sh = height, x=0, y=0, flipx = false, flipy = false) => {
     
     for (let i = 0; i < sh; i++) {
       for (let j = 0; j < sw; j++) {
@@ -142,6 +149,11 @@ export default function Graphics(state, ctx) {
 
 
   this.line = (x1, y1, x2, y2, color) => {
+    x1 = x1|0;
+    x2 = x2|0;
+    y1 = y1|0;
+    y2 = y2|0;
+
     let dy = y2 - y1,
         dx = x2 - x1,
         stepx = 1,
