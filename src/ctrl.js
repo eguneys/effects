@@ -42,21 +42,46 @@ export default function ctrl(state, g) {
     }
   };
 
+  const paddleBoost = 3;
+
   this.pressKey = key => {
     switch (key) {
     case 'up':
-      this.play.paddleMove([0, -1]);
+      this.play.paddleMove([0, -paddleBoost]);
       break;
     case 'down':
+      this.play.paddleMove([0, paddleBoost]);
+      break;
+    case 'left':
+      this.play.paddleMove([-paddleBoost, 0]);
+      break;
+    case 'right':
+      this.play.paddleMove([paddleBoost, 0]);
+      break;
+    };
+  };
+
+  this.releaseKey = key => {
+    console.log(this.data.paddleBoost);
+    switch (key) {
+    case 'up':
+      // check because down might have started
+      if (this.data.paddleBoost[1] < 0)
+        this.play.paddleMove([0, 1]);
+      break;
+    case 'down':
+      if (this.data.paddleBoost[1] > 0)
       this.play.paddleMove([0, 1]);
       break;
     case 'left':
-      this.play.paddleMove([-1, 0]);
+      if (this.data.paddleBoost[0] < 0)
+        this.play.paddleMove([1, 0]);
       break;
     case 'right':
+      if (this.data.paddleBoost[0] > 0)
       this.play.paddleMove([1, 0]);
       break;
-    };
+    }
   };
 
   this.update = delta => {
