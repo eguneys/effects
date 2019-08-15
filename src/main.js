@@ -20,7 +20,7 @@ export function app(element, options) {
   let audio = new Audio(state);
 
   audio.generate().then(() => {
-    audio.playSound('song', 1, 0, 1, true);
+    audio.playSound('song', 1, 0, 0.2, true);
   });
 
   let graphics = new Graphics(state, canvasCtx);

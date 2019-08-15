@@ -16,11 +16,13 @@ export default function view(ctrl, g) {
     ctrl.spots.each(_ => renderSpot(ctrl, _, g));
 
     renderBackground(ctrl, g);
+
     renderEdges(ctrl, g);
 
     ctrl.data.paddles.forEach(_ => renderPaddle(ctrl, _, g));
     ctrl.blocks.each(_ => renderBlock(_, g));
     renderHero(ctrl, g);
+
 
     renderUi(ctrl, g);
   };
@@ -61,19 +63,18 @@ export default function view(ctrl, g) {
     const off = 41;
     const on = 38;
 
-    const edge = ctrl.data.hero.edge;
+    const edge = ctrl.data.hero.edge,
+          left = edge==='left'?on:off,
+          right = edge==='right'?on:off,
+          up = edge==='up'?on:off,
+          down = edge==='down'?on:off;
 
-    const left = edge==='left'?on:off;
-    const right = edge==='right'?on:off;
-    const up = edge==='up'?on:off;
-    const down = edge==='down'?on:off;
-
-    g.renderTarget = b.Collision;
+    g.renderTarget = b.Midground;
 
     g.fr(0, 0, width, 1, up);
     g.fr(0, 0, 1, height, left);
-    g.fr(0, height - 1, width, 1, down);
-    g.fr(width - 1, 0, 1, height, right);
+    g.fr(0, height - 2, width, 1, down);
+    g.fr(width - 2, 0, 1, height, right);
   }
 
   function renderPaddle(ctrl, paddle, g) {
@@ -113,6 +114,9 @@ export default function view(ctrl, g) {
     }
 
     g.fr(x + moveX, y + moveY, w, h, 16);
+
+    g.renderTarget = b.Midground;
+
     g.fr(x + moveX, y + moveY, w, h, 16);
     g.fr(x, y, w, h, color);
 
@@ -146,6 +150,8 @@ export default function view(ctrl, g) {
 
   function renderUi(ctrl, g) {
     const score = ctrl.data.game.score + '';
+
+    g.renderTarget = b.Ui;
     
     const scoreLabel = text({
       x: width * 0.1,

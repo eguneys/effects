@@ -59,13 +59,19 @@ export default function hero(ctrl, { g, a }) {
 
     if (hero.active > 0) {
       hero.active = Math.max(0, hero.active - (delta / 16) * 0.2);
+    } else {
+      delete hero.edge;
     }
   };
 
   const updateTrail = delta => {
     ctrl.spots.create({ x: hero.x - hero.ax * 10,
                         y: hero.y - hero.ay * 10,
-                        color: 38,
+                        color: 4,
+                        life: 2 });
+    ctrl.spots.create({ x: hero.x - hero.ax * 5,
+                        y: hero.y - hero.ay * 5,
+                        color: 7,
                         life: 2 });
   };
 
