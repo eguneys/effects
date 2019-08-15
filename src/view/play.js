@@ -5,7 +5,7 @@ import * as u from '../util';
 
 export default function view(ctrl, g) {
   
-  const { width, height } = ctrl.data.game;
+  const { tileWidth, tileHeight, width, height } = ctrl.data.game;
 
   const b = g.buffers;
 
@@ -13,6 +13,9 @@ export default function view(ctrl, g) {
   this.render = ctrl => {
     ctrl = ctrl.play;
 
+    ctrl.spots.each(_ => renderSpot(ctrl, _, g));
+
+    renderBackground(ctrl, g);
     renderEdges(ctrl, g);
 
     ctrl.data.paddles.forEach(_ => renderPaddle(ctrl, _, g));
@@ -21,6 +24,38 @@ export default function view(ctrl, g) {
 
     renderUi(ctrl, g);
   };
+
+  function renderSpot(ctrl, spot, g) {
+    g.renderTarget = b.Buffer;
+
+    const { x, y, radius, color } = spot.data;
+    
+    g.fillCircle(x, y, radius, color);
+    g.fillCircle(x, y, radius * 0.6, color + 1);
+
+  }
+
+  function renderBackground(ctrl, g) {
+    g.renderTarget = b.Background;
+
+    let rx0 = 0,
+        rx1 = width / tileWidth,
+        ry0 = 0,
+        ry1 = height / tileHeight;
+
+    for (let i = rx0; i < rx1; i++) {
+      for (let j = ry0; j < ry1; j++) {
+        let x, y;
+
+        x = i * tileWidth,
+        y = j * tileHeight;
+
+        let tc = g.pget(x, y, b.Buffer);
+
+        g.fr(x, y, tileWidth, tileHeight, tc);
+      }
+    }
+  }
 
   function renderEdges(ctrl, g) {
     const off = 41;
@@ -33,12 +68,12 @@ export default function view(ctrl, g) {
     const up = edge==='up'?on:off;
     const down = edge==='down'?on:off;
 
-    g.renderTarget = b.Screen;
+    g.renderTarget = b.Collision;
 
-    g.line(0, 0, width, 0, up);
-    g.line(0, 0, 0, height, left);
-    g.line(0, height - 1, width, height -1, down);
-    g.line(width - 1, 0, width - 1, height, right);
+    g.fr(0, 0, width, 1, up);
+    g.fr(0, 0, 1, height, left);
+    g.fr(0, height - 1, width, 1, down);
+    g.fr(width - 1, 0, 1, height, right);
   }
 
   function renderPaddle(ctrl, paddle, g) {
@@ -101,7 +136,7 @@ export default function view(ctrl, g) {
     const alphas = [42, 41, 40, 39, 38];
     const highlight = alphas[Math.floor(active) % alphas.length];
 
-    //g.fillCircle(x - vx * 3, y - vy * 3, radius, 43);
+    g.fillCircle(x - vx * 3, y - vy * 3, radius, 43);
     g.fillCircle(x, y, radius, highlight);
   }
 

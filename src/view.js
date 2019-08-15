@@ -28,6 +28,10 @@ export default function view(ctrl, g) {
   };
 
   function flush(ctrl, g) {
+    g.renderSource = b.Background;
+    g.renderTarget = b.Screen;
+    g.spr();
+
     g.renderSource = b.Collision;
     g.renderTarget = b.Screen;
     g.spr();
@@ -38,7 +42,7 @@ export default function view(ctrl, g) {
 
     g.renderSource = b.Midground;
     g.renderTarget = b.Screen;
-    g.spr();
+    //g.spr();
 
     g.renderSource = b.Foreground;
     g.renderTarget = b.Screen;
@@ -50,9 +54,15 @@ export default function view(ctrl, g) {
     g.clear(0);
     g.renderTarget = b.Collision;
     g.clear(0);
+    g.renderTarget = b.Background;
+    g.clear(0);
+    g.renderTarget = b.Buffer;
+    g.clear(0);
     g.renderTarget = b.Screen;
     g.clear(0);
     g.renderTarget = b.Midground;
+    g.clear(0);
+    g.renderTarget = b.Foreground;
     g.clear(0);
   }
 
@@ -64,7 +74,7 @@ export default function view(ctrl, g) {
     const w = 8;
 
     for (let i = 0; i < 64; i++) {
-      const x = Math.floor(i / 32) * w * 4 + width * 0.2,
+      const x = Math.floor(i / 32) * w * 4 + width * 0.1,
             y = (i % 32) * w;
       g.fillRect(x, y, x + w, y + w, i);
       text({

@@ -5,6 +5,7 @@ export const States = {
 
 export const HERO_COLOR = 3;
 export const BLOCK_COLOR = 4;
+export const SPOT_COLOR = 1;
 
 
 export const PI = Math.PI;
@@ -15,6 +16,14 @@ export const THIRDTAU = TAU / 3;
 
 export function rand(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+export function randInt(min,max) {
+  return Math.floor(rand(min,max));
+}
+
+export function randItem(items) {
+  return items[randInt(0, items.length)];
 }
 
 export function clamp(v, min, max) {

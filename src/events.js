@@ -18,6 +18,8 @@ function unbindable(el, eventName, callback) {
 
 function startMove(ctrl) {
   return function(e) {
+      console.log(e.code);
+
     switch(e.code) {
     case 'Space':
       ctrl.spaceHit();

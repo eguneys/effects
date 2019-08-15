@@ -6,6 +6,8 @@ export default function defaults() {
         width = height * 1.5,
         ratio = height / width;
 
+  const nbTiles = 100;
+
   const gameUnit = 40;
 
   const paddleWidth = gameUnit;
@@ -16,6 +18,8 @@ export default function defaults() {
     game: {
       score: 0,
       unit: gameUnit,
+      tileWidth: width / nbTiles,
+      tileHeight: height / nbTiles,
       width,
       height,
       ratio,
@@ -69,7 +73,7 @@ export default function defaults() {
       rotation: 0,
       x: width / 2,
       y: height / 2,
-      ax: 0,
+      ax: -1,
       ay: -1,
       vx: 0,
       vy: 0,

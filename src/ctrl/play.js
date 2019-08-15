@@ -4,6 +4,7 @@ import Pool from '../pool';
 
 import makeHero from './hero';
 import makePaddles from './paddle';
+import makeSpot from './spot';
 
 import defaults from '../state';
 
@@ -18,6 +19,8 @@ export default function ctrl(state, g) {
   this.paddles = new makePaddles(this, g);
 
   this.blocks = new Pool(makeBlock, this);
+
+  this.spots = new Pool(makeSpot, this);
 
   const updateCollision = delta => {
     
@@ -38,12 +41,29 @@ export default function ctrl(state, g) {
 
   };
 
+  const spotLife = () => u.rand(2, 5);
+
   const blockHit = (hitBlock) => {
-    const { angle } = hitBlock.data;
+    const { x, y, angle, color } = hitBlock.data;
 
     this.hero.changeV(angle);
 
     this.blocks.release(hitBlock);
+
+    this.spots.create({x, y, color});
+    if (u.rand(0,1)<0.5)
+      this.spots.create({ x: x+20, y, life: spotLife(), color });
+    if (u.rand(0,1)<0.5)
+      this.spots.create({ x: x-20, y, life: spotLife(), color });
+    if (u.rand(0,1)<0.5)
+      this.spots.create({ x: x+20, y: y+20, life: spotLife(), color });
+    if (u.rand(0,1)<0.5)
+      this.spots.create({ x: x+20, y: y-20, life: spotLife(), color });
+    if (u.rand(0,1)<0.5)
+      this.spots.create({ x, y: y + 20, life: spotLife(), color });
+    if (u.rand(0,1)<0.5)
+      this.spots.create({ x, y: y - 20, life: spotLife(), color });
+    
 
     this.data.game.score++;
   };
@@ -109,6 +129,7 @@ export default function ctrl(state, g) {
     this.hero.update(delta);
     this.paddles.update(delta);
     this.blocks.each(_ => _.update(delta));
+    this.spots.each(_ => _.update(delta));
   };
 }
 
@@ -132,10 +153,19 @@ function makeBlock(ctrl) {
     y: 0,
     angle: u.THIRDTAU,
     length: 100,
-    color: u.BLOCK_COLOR
+    color: spotColor()
   });
 
 }
+
+const spotColor = () => u.randItem([
+  11,
+  21,
+  54,
+  42,
+  29,
+  18
+]);
 
 const withDelay = (fn, delay, updateFn) => {
   let lastUpdate = 0;

@@ -5,6 +5,8 @@ export default function hero(ctrl) {
 
   const hero = ctrl.data.hero;
 
+  const { radius } = hero;
+
   const updatePos = delta => {
 
     hero.vx += hero.ax * delta * 0.001 * hero.boost;
@@ -13,29 +15,29 @@ export default function hero(ctrl) {
     hero.x += hero.vx;
     hero.y += hero.vy;
 
-    if (hero.x < 0) {
-      hero.x = 0;
+    if (hero.x < radius) {
+      hero.x = radius;
       hero.vx *= -0.5;
       hero.ax *= -1;
       hero.edge = 'left';
       hero.active = 4;
     }
-    if (hero.y < 0) {
-      hero.y = 0;
+    if (hero.y < radius) {
+      hero.y = radius;
       hero.vy *= -0.5;
       hero.ay *= -1;
       hero.edge = 'up';
       hero.active = 4;
     }
-    if (hero.x >= width) {
-      hero.x = width;
+    if (hero.x >= width - radius) {
+      hero.x = width - radius;
       hero.vx *= -0.5;
       hero.ax *= -1;
       hero.edge = 'right';
       hero.active = 4;
     }
-    if (hero.y >= height) {
-      hero.y = height;
+    if (hero.y >= height - radius) {
+      hero.y = height - radius;
       hero.vy *= -0.5;
       hero.ay *= -1;
       hero.edge = 'down';
