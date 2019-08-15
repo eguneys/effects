@@ -11,7 +11,7 @@ export default function defaults() {
   const paddleWidth = gameUnit;
 
   return {
-    debug: true,
+    debug: false,
     state: u.States.Over,
     game: {
       score: 0,

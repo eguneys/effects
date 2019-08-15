@@ -57,6 +57,9 @@ export default function view(ctrl, g) {
   }
 
   function renderDebug(ctrl, g) {
+    if (!ctrl.data.debug) {
+      return;
+    }
     g.renderTarget = b.Foreground;
     const w = 8;
 

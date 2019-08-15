@@ -30,14 +30,15 @@ export default function paddles(ctrl, g) {
   };
 
   const updateCollision = delta => {
-    const hitPaddle = paddles.find(_ => {
-      return collides(g,
-                      u.HERO_COLOR,
-                      rectCollisionRange(_));
-    });
+    const hitPaddle = paddles.map(_ => ({
+      e: _,
+      c: collides(g,
+                  u.HERO_COLOR,
+                  rectCollisionRange(_))
+    })).find(_ => !!_.c);
 
     if (hitPaddle) {
-      // ctrl.paddleHit();
+      ctrl.paddleHit();
     }
 
   };

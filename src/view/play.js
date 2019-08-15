@@ -1,5 +1,7 @@
 import text from '../text';
 
+import * as u from '../util';
+
 
 export default function view(ctrl, g) {
   

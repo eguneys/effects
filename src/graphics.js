@@ -147,6 +147,46 @@ export default function Graphics(state, ctx) {
 
   };
 
+  this.rspr = (sx, sy, sw, sh, destCenterX, destCenterY, scale, angle) => {
+    let sourceCenterX = (sw / 2)|0,
+        sourceCenterY = (sh / 2)|0;
+
+    let destWidth = sw,
+        destHeight = sh;
+
+    let halfWidth = (destWidth / 2 * 1.41421)|0 + 5,
+        halfHeight = (destHeight / 2 * 1.41421)|0 + 5;
+
+    let startX = -halfWidth,
+        endX = halfWidth,
+        startY = -halfHeight,
+        endY = halfHeight;
+
+    let cos = Math.cos(-angle),
+        sin = Math.sin(-angle);
+
+    for (let y = startY; y < endY; y++) {
+      for (let x = startX; x < endX; x++) {
+        let u = sourceCenterX + Math.round(cos * x + sin * y),
+            v = sourceCenterY + Math.round(-sin * x + cos * y);
+
+        let drawX = (x + destCenterX)|0,
+            drawY = (y + destCenterY)|0;
+
+        if (drawX > 0 && drawX < width && drawY > 0 && drawY < height) {
+          if (u >= 0 && v >= 0 && u < sw && v < sh) {
+            let iSource = this.renderSource + (u + sx) + (v + sy) * width,
+                iTarget = this.renderTarget + drawX + drawY * width;
+
+            if (ram[iSource] > 0) {
+              ram[iTarget] = pal[ram[iSource]];
+            }
+          }
+        }
+      }
+    }
+  };
+
 
   this.line = (x1, y1, x2, y2, color) => {
     x1 = x1|0;

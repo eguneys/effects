@@ -9,11 +9,14 @@ export function circleCollisionRange({ x, y, radius }) {
     for (let a = 0; a < u.TAU; a+= u.THIRDPI) {
       const c = Math.cos(a) * radius,
             s = Math.sin(a) * radius;
-      if (collider(x + c, y + s)); {
-        return true;
+      let cx = x + c,
+          cy = y + s;
+
+      if (collider(cx, cy)); {
+        return { x: cx, y: cy };
       }
     }
-    return false;
+    return null;
   };
 }
 
@@ -22,11 +25,15 @@ export function lineCollisionRange({ x, y, angle, length }) {
     for (let a = 0; a < length; a+=0.1) {
       const c = Math.cos(angle) * a,
             s = Math.sin(angle) * a;
-      if (collider(x + c, y + s)) {
-        return true;
+
+      let cx = x + c,
+          cy = y + s;
+
+      if (collider(cx, cy)) {
+        return { x: cx, y: cy };
       }
     }
-    return false;
+    return null;
   };
 }
 
@@ -34,11 +41,14 @@ export function rectCollisionRange({ x, y, w, h }) {
   return (collider) => {
     for (let dx = 0; dx < w; dx+=1) {
       for (let dy = 0; dy < h; dy += 1) {
-        if (collider(x + dx, y + dy)) {
-          return true;
+        let cx = x + dx,
+            cy = y + dy;
+
+        if (collider(cx, cy)) {
+          return { x: dx, y: dy };
         }
       }
     }
-    return false;
+    return null;
   };
 }
