@@ -42,7 +42,7 @@ export default function view(ctrl, g) {
 
     g.renderSource = b.Midground;
     g.renderTarget = b.Screen;
-    //g.spr();
+    g.spr();
 
     g.renderSource = b.Foreground;
     g.renderTarget = b.Screen;

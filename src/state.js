@@ -77,6 +77,7 @@ export default function defaults() {
       ay: -1,
       vx: 0,
       vy: 0,
+      rotation: 0,
       boost: 1,
       tick: 0,
       active: 0

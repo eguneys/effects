@@ -128,16 +128,20 @@ export default function view(ctrl, g) {
 
   function renderHero(ctrl, g) {
     g.renderTarget = b.Collision;
-    const { vx, vy, x, y, radius, color, active } = ctrl.data.hero;
+    const { vx, vy, x, y, radius, rotation, color, active, tick } = ctrl.data.hero;
     g.fillCircle(x, y, radius, color);
 
     g.renderTarget = b.Midground;
 
-    const alphas = [42, 41, 40, 39, 38];
+    const rC = Math.cos(rotation),
+          rS = Math.sin(rotation);
+
+    const alphas = [40, 5, 4, 3, 2];
     const highlight = alphas[Math.floor(active) % alphas.length];
 
-    g.fillCircle(x - vx * 3, y - vy * 3, radius, 43);
+    g.fillCircle(x - vx * 0.5, y - vy * 0.5, radius, 43);
     g.fillCircle(x, y, radius, highlight);
+    g.fillCircle(x - rC, y - rS, radius * 0.5, 41);
   }
 
   function renderUi(ctrl, g) {

@@ -64,8 +64,6 @@ export default function ctrl(state, g) {
     if (u.rand(0,1)<0.5)
       this.spots.create({ x, y: y - 20, life: spotLife(), color });
     
-
-    this.data.game.score++;
   };
 
   const maybeBoost = () => {

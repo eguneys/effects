@@ -45,6 +45,11 @@ export default function hero(ctrl) {
     }
   };
 
+  const updateRotation = delta => {
+    hero.rotation += hero.active;
+    hero.rotation = hero.rotation % u.TAU;
+  };
+
   const updateTicks = delta => {
     hero.tick += delta;
 
@@ -53,9 +58,23 @@ export default function hero(ctrl) {
     }
   };
 
+  const updateTrail = delta => {
+    ctrl.spots.create({ x: hero.x - hero.ax * 10,
+                        y: hero.y - hero.ay * 10,
+                        color: 38,
+                        life: 2 });
+  };
+
+  const updateScore = delta => {
+    ctrl.data.game.score += Math.floor(hero.active);
+  };
+
   this.update = delta => {
     updatePos(delta);
+    updateRotation(delta);
     updateTicks(delta);
+    updateTrail(delta);
+    updateScore(delta);
   };
 
   this.boost = boost => {
