@@ -25,6 +25,7 @@ export default function defaults() {
     paddleBoost: [1, 1],
     paddles: [
       {
+        side: 'up',
         vx: 1,
         vy: 0,
         x: width / 2,
@@ -33,6 +34,7 @@ export default function defaults() {
         h: 10
       },
       {
+        side: 'down',
         vx: -1,
         vy: 0,
         x: width / 2,
@@ -41,6 +43,7 @@ export default function defaults() {
         h: 10
       },
       {
+        side: 'left',
         vx: 0,
         vy: 1,
         x: 1,
@@ -49,6 +52,7 @@ export default function defaults() {
         h: paddleWidth
       },
       {
+        side: 'right',
         vx: 0,
         vy: -1,
         x: width - 11,
@@ -59,16 +63,19 @@ export default function defaults() {
     ],
     hero: {
       color: u.HERO_COLOR,
-      radius: gameUnit / 4,
+      radius: gameUnit / 8,
       gap: 2,
       gapMove: 2,
       rotation: 0,
       x: width / 2,
       y: height / 2,
+      ax: 0,
+      ay: -1,
       vx: 0,
-      vy: -1,
+      vy: 0,
       boost: 1,
-      tick: 0
+      tick: 0,
+      active: 0
     }
   };
  

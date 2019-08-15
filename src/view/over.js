@@ -8,6 +8,31 @@ export default function view(ctrl, g) {
 
   const b = g.buffers;
 
+  const renderLogo = ctrl => {
+
+    const t = ctrl.data.game.tick * 0.01;
+
+    const w = width * 0.6,
+          h = height * 0.3,
+          moveX = w * 0.008,
+          x = width / 2 - w / 2,
+          y = height * 0.2 - h / 2;
+
+    let deltaX = Math.sin(t) * moveX;
+
+    g.fr(x + moveX * 3, y + moveX * 3 - Math.sin(t) * moveX , w, h, 41);
+    g.fr(x + deltaX, y, w, h, 50);
+    
+    text({
+      x: width / 2 + deltaX,
+      y: height * 0.2,
+      text: 'backout',
+      color: 1,
+      scale: 5
+    }, g);
+
+  };
+
   const renderOver = (ctrl) => {
 
     const action = 5;
@@ -15,28 +40,23 @@ export default function view(ctrl, g) {
 
     const score = ctrl.data.game.score + '';
 
-    text({
+    renderLogo(ctrl);
+
+    let gap = height * 0.1;
+    let s;
+
+    s = text({
       x: width / 2,
-      y: height * 0.2,
-      text: 'backout',
-      color: 1,
-      scale: 5
+      y: height * 0.45,
+      text: 'high score ' + score,
+      color: 12,
+      scale: 3,
+      render: ctrl.data.gameover
     }, g);
 
-    if (ctrl.data.gameover) {
-      text({
-        x: width / 2,
-        y: height * 0.4,
-        text: 'high score ' + score,
-        color: 12,
-        scale: 3
-      }, g);
-
-    }
-
-    text({
+    s = text({
       x: width / 2,
-      y: height * 0.5,
+      y: s.ey + gap,
       text: 'press space to play.',
       color: action,
       scale: 2
@@ -45,7 +65,7 @@ export default function view(ctrl, g) {
 
     text({
       x: width / 2,
-      y: height * 0.7,
+      y: s.ey + gap * 2,
       text: 'avoid paddles to hit the ball.\nuse arrow keys to control paddles.\nuse space to go faster.',
       vspacing: 8,
       color: info,

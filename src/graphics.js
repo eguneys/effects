@@ -107,20 +107,17 @@ export default function Graphics(state, ctx) {
   let buf8 = new Uint8ClampedArray(buf);
   let data = new Uint32Array(buf);
 
-  let ram = new Uint16Array(width * height * pages);
+  let ram = new Uint8ClampedArray(width * height * pages);
 
   this.clear = (color) => {
     ram.fill(color, this.renderTarget, this.renderTarget + pagesize);
   };
 
 
-  this.pset = (x, y, color, alpha = 255) => {
+  this.pset = (x, y, color) => {
     x = u.clamp(x | 0, 0, width);
     y = u.clamp(y | 0, 0, height);
-
-    const value = color | (alpha << 8);
-
-    ram[this.renderTarget + y * width + x] = value;
+    ram[this.renderTarget + y * width + x] = color;
   };
 
   this.pget = (x, y, page) => {
@@ -141,7 +138,7 @@ export default function Graphics(state, ctx) {
                 iSource = this.renderSource + ((sy + i)*width+sx+j);
 
             if (ram[iSource] > 0) {
-              ram[iTarget] = ram[iSource];
+              ram[iTarget] = pal[ram[iSource]];
             }
           }
         }
@@ -234,6 +231,11 @@ export default function Graphics(state, ctx) {
   };
 
   this.fillRect = (x1, y1, x2, y2, color) => {
+    x1 = x1|0,
+    y1 = y1|0,
+    x2 = x2|0,
+    y2 = y2|0;
+
     let i = Math.abs(y2 - y1);
 
     this.line(x1, y1, x2, y1, color);
@@ -286,11 +288,9 @@ export default function Graphics(state, ctx) {
     let i = b.Effects;
 
     while (i--) {
-      const alpha = (ram[i] & 0x0000ff00) >> 8,
-            iColor = ram[i] & 0x000000ff,
-            color = colors[pal[iColor]] & 0x00ffffff;
 
-      data[i] = color | (alpha << 24);
+      data[i] = colors[pal[ram[i]]];
+
     }
 
     imageData.data.set(buf8);

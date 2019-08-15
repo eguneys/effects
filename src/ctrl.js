@@ -63,6 +63,7 @@ export default function ctrl(state, g) {
     maybeUpdateGame(delta);
     maybeUpdateOver(delta);
 
+    this.data.game.tick += delta;
   };
   
 }

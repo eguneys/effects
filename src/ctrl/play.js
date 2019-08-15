@@ -50,19 +50,22 @@ export default function ctrl(state, g) {
 
   const maybeBoost = () => {
     if (this.userBoost) {
-      this.hero.boost(10);
-      this.userBoost = false;
+      this.hero.boost(20);
+
+      u.ensureDelay(this.userBoost, () => {
+        this.userBoost = 0;
+      }, 100);
     } else {
       this.hero.boost(1);
     }
   };
 
   const maybeSpawnBlock = withDelay(() => {
-    const length = 10;
+    const length = this.data.game.unit;
     this.blocks.create({
       x: u.rand(length, width - length),
       y: u.rand(length, height - length),
-      length,
+      length: length * 0.4,
       angle: u.rand(0, u.TAU / 4 - u.TAU / 8) + u.TAU / 10
     });
 
@@ -75,7 +78,7 @@ export default function ctrl(state, g) {
   };
 
   this.boost = () => {
-    this.userBoost = true;
+    this.userBoost = u.now();
   };
 
   this.paddleHit = () => {
@@ -84,7 +87,6 @@ export default function ctrl(state, g) {
   };
 
   this.paddleMove = v => {
-    console.log(v);
     if (v[0] === 0) {
       this.data.paddleBoost[0] = 1;
     } else {
