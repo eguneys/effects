@@ -38,7 +38,7 @@ export default function paddles(ctrl, g) {
     })).find(_ => !!_.c);
 
     if (hitPaddle) {
-      ctrl.paddleHit();
+      // ctrl.paddleHit();
     }
 
   };

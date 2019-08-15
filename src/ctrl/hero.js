@@ -1,6 +1,6 @@
 import * as u from '../util';
 
-export default function hero(ctrl) {
+export default function hero(ctrl, { g, a }) {
   const { width, height } = ctrl.data.game;
 
   const hero = ctrl.data.hero;
@@ -21,6 +21,7 @@ export default function hero(ctrl) {
       hero.ax *= -1;
       hero.edge = 'left';
       hero.active = 4;
+      hero.audioEdge = true;
     }
     if (hero.y < radius) {
       hero.y = radius;
@@ -28,6 +29,7 @@ export default function hero(ctrl) {
       hero.ay *= -1;
       hero.edge = 'up';
       hero.active = 4;
+      hero.audioEdge = true;
     }
     if (hero.x >= width - radius) {
       hero.x = width - radius;
@@ -35,6 +37,7 @@ export default function hero(ctrl) {
       hero.ax *= -1;
       hero.edge = 'right';
       hero.active = 4;
+      hero.audioEdge = true;
     }
     if (hero.y >= height - radius) {
       hero.y = height - radius;
@@ -42,6 +45,7 @@ export default function hero(ctrl) {
       hero.ay *= -1;
       hero.edge = 'down';
       hero.active = 4;
+      hero.audioEdge = true;
     }
   };
 
@@ -69,9 +73,21 @@ export default function hero(ctrl) {
     ctrl.data.game.score += Math.floor(hero.active);
   };
 
+  const updateAudio = delta => {
+    if (hero.active === 4) {
+      if (hero.audioEdge) {
+        hero.audioEdge = false;
+        a.playSound('sndSplode2');
+      } else {
+        a.playSound('sndSplode3');
+      }
+    }
+  };
+
   this.update = delta => {
     updatePos(delta);
     updateRotation(delta);
+    updateAudio(delta);
     updateTicks(delta);
     updateTrail(delta);
     updateScore(delta);

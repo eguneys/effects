@@ -1,5 +1,6 @@
 import defaults from './state';
 
+import Audio from './audio';
 import Graphics from './graphics';
 import makeView from './view';
 import makeCtrl from './ctrl';
@@ -10,15 +11,26 @@ import * as events from './events';
 export function app(element, options) {
 
   const canvas = document.createElement('canvas');
-
-  const ctx = canvas.getContext('2d');
+  const canvasCtx = canvas.getContext('2d');
 
   const state = {
     ...defaults()
   };
 
-  let graphics = new Graphics(state, ctx);
-  let ctrl = new makeCtrl(state, graphics);
+  let audio = new Audio(state);
+
+  audio.generate().then(() => {
+    audio.playSound('song', 1, 0, 1, true);
+  });
+
+  let graphics = new Graphics(state, canvasCtx);
+
+  let ctx = {
+    g: graphics,
+    a: audio
+  };
+
+  let ctrl = new makeCtrl(state, ctx);
   let view = new makeView(ctrl, graphics);
 
   new Loop(delta => {

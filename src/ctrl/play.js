@@ -10,11 +10,13 @@ import defaults from '../state';
 
 import { collides, lineCollisionRange } from '../collision';
 
-export default function ctrl(state, g) {
+export default function ctrl(state, ctx) {
+  const { g, a } = ctx;
+
   this.data = state;
   const { width, height } = this.data.game;
 
-  this.hero = new makeHero(this);
+  this.hero = new makeHero(this, ctx);
 
   this.paddles = new makePaddles(this, g);
 
@@ -63,7 +65,6 @@ export default function ctrl(state, g) {
       this.spots.create({ x, y: y + 20, life: spotLife(), color });
     if (u.rand(0,1)<0.5)
       this.spots.create({ x, y: y - 20, life: spotLife(), color });
-    
   };
 
   const maybeBoost = () => {

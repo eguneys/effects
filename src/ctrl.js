@@ -3,12 +3,14 @@ import * as u from './util';
 import playCtrl from './ctrl/play';
 import overCtrl from './ctrl/over';
 
-export default function ctrl(state, g) {
+export default function ctrl(state, ctx) {
+  const { g, a } = ctx;
+
   this.data = state;
 
-  this.play = new playCtrl(state, g);
+  this.play = new playCtrl(state, ctx);
 
-  this.over = new overCtrl(state, g);
+  this.over = new overCtrl(state, ctx);
 
   const maybeUpdateGame = delta => {
     if (this.data.state === u.States.Play) {
@@ -62,7 +64,6 @@ export default function ctrl(state, g) {
   };
 
   this.releaseKey = key => {
-    console.log(this.data.paddleBoost);
     switch (key) {
     case 'up':
       // check because down might have started
