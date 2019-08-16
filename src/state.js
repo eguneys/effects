@@ -33,7 +33,7 @@ export default function defaults() {
         vx: 1,
         vy: 0,
         x: width / 2,
-        y: 1,
+        y: 2,
         w: paddleWidth,
         h: 10
       },

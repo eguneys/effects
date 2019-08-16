@@ -36,15 +36,16 @@ export default function view(ctrl, g) {
     g.renderTarget = b.Screen;
     // g.spr();
 
-    g.renderSource = b.Ui;
-    g.renderTarget = b.Screen;
-    g.spr();
-
     g.renderSource = b.Midground;
     g.renderTarget = b.Screen;
     g.spr();
 
     g.renderSource = b.Foreground;
+    g.renderTarget = b.Screen;
+    g.spr();
+
+
+    g.renderSource = b.Ui;
     g.renderTarget = b.Screen;
     g.spr();
   }

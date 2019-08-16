@@ -14,17 +14,15 @@ export default function view(ctrl, g) {
     ctrl = ctrl.play;
 
     ctrl.spots.each(_ => renderSpot(ctrl, _, g));
+    ctrl.blocks.each(_ => renderBlock(_, g));
+    ctrl.data.paddles.forEach(_ => renderPaddle(ctrl, _, g));
+
+    renderHero(ctrl, g);
+    renderPaddleForce(ctrl, g);
 
     renderBackground(ctrl, g);
 
     renderEdges(ctrl, g);
-
-    renderPaddleForce(ctrl, g);
-
-    ctrl.data.paddles.forEach(_ => renderPaddle(ctrl, _, g));
-    ctrl.blocks.each(_ => renderBlock(_, g));
-    renderHero(ctrl, g);
-
 
     renderUi(ctrl, g);
   };
@@ -87,7 +85,7 @@ export default function view(ctrl, g) {
       return;
     }
 
-    g.renderTarget = b.Midground;
+    g.renderTarget = b.Buffer;
 
     const sfx = (Math.sin(ctrl.data.game.tick * 0.01) + 1) / 2 * 3;
 
@@ -175,10 +173,14 @@ export default function view(ctrl, g) {
   }
 
   function renderBlock(ctrl, g) {
-    g.renderTarget = b.Collision;
     const { x, y, angle, length, color } = ctrl.data;
     let c = Math.cos(angle) * length,
         s = Math.sin(angle) * length;
+
+    // g.renderTarget = b.Collision;
+    // g.line(x, y, x + c, y + s, color);
+
+    g.renderTarget = b.Buffer;
     g.line(x, y, x + c, y + s, color);
   }
 
@@ -187,13 +189,13 @@ export default function view(ctrl, g) {
     const { vx, vy, x, y, radius, rotation, color, active, tick } = ctrl.data.hero;
     g.fillCircle(x, y, radius, color);
 
-    g.renderTarget = b.Midground;
-
     const rC = Math.cos(rotation),
           rS = Math.sin(rotation);
 
     const alphas = [40, 5, 4, 3, 2];
     const highlight = alphas[Math.floor(active) % alphas.length];
+
+    g.renderTarget = b.Midground;
 
     g.fillCircle(x - vx * 0.5, y - vy * 0.5, radius, 43);
     g.fillCircle(x, y, radius, highlight);

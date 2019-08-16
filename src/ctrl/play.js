@@ -5,6 +5,7 @@ import Pool from '../pool';
 import makeHero from './hero';
 import makePaddles from './paddle';
 import makeSpot from './spot';
+import makeBlock from './block';
 
 import defaults from '../state';
 
@@ -28,11 +29,6 @@ export default function ctrl(state, ctx) {
     
     const hitBlock = this.blocks
           .find(_ => {
-
-            if (_.life < 100) {
-              return false;
-            }
-
             return collides(g,
                             u.HERO_COLOR,
                             lineCollisionRange(_.data));
@@ -124,37 +120,6 @@ export default function ctrl(state, ctx) {
     this.spots.each(_ => _.update(delta));
   };
 }
-
-function makeBlock(ctrl) {
-
-  this.init = (d) => {
-    this.data = { ...defaults(), ...d };
-
-    this.life = 0;
-    
-  };
-
-  this.update = delta => {
-    this.life += delta;
-    
-    
-  };
-
-  const defaults = () => ({
-    x: 0,
-    y: 0,
-    angle: u.THIRDTAU,
-    length: 100,
-    color: spotColor()
-  });
-
-}
-
-const spotColor = () => u.randItem([
-  18,
-  20,
-  5
-]);
 
 const withDelay = (fn, delay, updateFn) => {
   let lastUpdate = 0;
