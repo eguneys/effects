@@ -104,8 +104,10 @@ export default function ctrl(ctrl, ctx) {
   };
 
   this.paddleHit = () => {
-    this.data.gameover = u.now();
-    this.data.state = u.States.Over;
+    if (!this.data.hero.inwards) {
+      this.data.gameover = u.now();
+      this.data.state = u.States.Over;
+    }
   };
 
   this.paddleMove = v => {
