@@ -155,6 +155,10 @@ export default function hero(ctrl, { g, a }) {
     if (hero.friction < 1) {
       a.playSound('sndShield', 1, 0, 0.2);
     }
+    if (hero.exploding && !hero.audioExplode) {
+      hero.audioExplode = true;
+      a.playSound('sndSplode1');
+    }
   };
 
   const updateShake = delta => {

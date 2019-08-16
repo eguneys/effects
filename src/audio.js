@@ -1,6 +1,7 @@
 import CPlayer from './audio/player-small';
 
 import song from './audio/song';
+import sndSplode1 from './audio/sndSplode1';
 import sndSplode2 from './audio/sndSplode2';
 import sndSplode3 from './audio/sndSplode3';
 import sndShield from './audio/sndShield';
@@ -20,6 +21,7 @@ export default function Audio(state) {
 
   const data = [
     { name: 'song', data: song },
+    { name: 'sndSplode1', data: sndSplode1 },
     { name: 'sndSplode2', data: sndSplode2 },
     { name: 'sndSplode3', data: sndSplode3 },
     { name: 'sndShield', data: sndShield }
