@@ -35,15 +35,6 @@ export default function makeBlock(ctrl) {
       ctrl.blocks.release(this);
     }
   };
-
-  const defaults = () => ({
-    x: 0,
-    y: 0,
-    angle: u.THIRDTAU,
-    length: 100,
-    color: spotColor(),
-  });
-
 }
 
 const spotColor = () => u.randItem([
@@ -51,3 +42,11 @@ const spotColor = () => u.randItem([
   20,
   5
 ]);
+
+const defaults = () => ({
+  x: 0,
+  y: 0,
+  angle: u.THIRDTAU,
+  length: 100,
+  color: spotColor(),
+});

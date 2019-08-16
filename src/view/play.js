@@ -13,6 +13,7 @@ export default function view(ctrl, g) {
   this.render = ctrl => {
     ctrl = ctrl.play;
 
+    ctrl.stars.each(_ => renderStar(ctrl, _, g));
     ctrl.spots.each(_ => renderSpot(ctrl, _, g));
     ctrl.blocks.each(_ => renderBlock(_, g));
     ctrl.data.paddles.forEach(_ => renderPaddle(ctrl, _, g));
@@ -34,6 +35,15 @@ export default function view(ctrl, g) {
     
     g.fillCircle(x, y, radius, color);
     g.fillCircle(x, y, radius * 0.6, color + 1);
+
+  }
+
+  function renderStar(ctrl, star, g) {
+    const { x, y } = star.data;
+
+    g.renderTarget = b.Midground;
+
+    g.pset(x, y, 48);
 
   }
 

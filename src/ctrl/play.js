@@ -6,6 +6,7 @@ import makeHero from './hero';
 import makePaddles from './paddle';
 import makeSpot from './spot';
 import makeBlock from './block';
+import makeStar from './star';
 
 import defaults from '../state';
 
@@ -24,6 +25,8 @@ export default function ctrl(state, ctx) {
   this.blocks = new Pool(makeBlock, this);
 
   this.spots = new Pool(makeSpot, this);
+
+  this.stars = new Pool(makeStar, this);
 
   const updateCollision = delta => {
     
@@ -86,6 +89,10 @@ export default function ctrl(state, ctx) {
 
   }, 1000);
 
+  const maybeSpawnStar = withDelay(() => {
+    this.stars.create({ life: u.rand(0, 10) });
+  }, 100);
+
   this.reset = () => {
     this.data.hero.x = width / 2;
     this.data.hero.y = height / 2;
@@ -112,12 +119,14 @@ export default function ctrl(state, ctx) {
   this.update = delta => {
     maybeBoost(delta);
     maybeSpawnBlock(delta);
+    maybeSpawnStar(delta);
     updateCollision(delta);
 
     this.hero.update(delta);
     this.paddles.update(delta);
     this.blocks.each(_ => _.update(delta));
     this.spots.each(_ => _.update(delta));
+    this.stars.each(_ => _.update(delta));
   };
 }
 
