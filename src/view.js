@@ -25,7 +25,37 @@ export default function view(ctrl, g) {
     renderDebug(ctrl, g);
 
     flush(ctrl, g);
+
+    effects(ctrl, g);
   };
+
+  function effects(ctrl, g) {
+    g.renderTarget = b.Effects;
+    g.clear(0);
+
+    // let t = ctrl.data.game.tick * 0.01;
+    // let angle = Math.sin(t) * u.PI *0.1;
+    // let x = Math.sin(t) * 10,
+    //     y = Math.cos(t) * 10;
+    // angle = 0;
+
+    let { angle, x, y } = ctrl.data.shake;
+
+    angle = u.round(angle);
+    x = u.round(x);
+    y = u.round(y);
+
+    g.renderSource = b.Screen;
+    g.renderTarget = b.Effects;
+    g.spr();
+
+    g.renderTarget = b.Screen;
+    g.clear(0);
+
+    g.renderSource = b.Effects;
+    g.renderTarget = b.Screen;
+    g.rspr(0, 0, width, height, width/2 + x, height/2 + y, 1, angle);
+  }
 
   function flush(ctrl, g) {
     g.renderSource = b.Background;

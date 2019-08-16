@@ -2,15 +2,18 @@ import * as u from './util';
 
 import playCtrl from './ctrl/play';
 import overCtrl from './ctrl/over';
+import shakeCtrl from './ctrl/shake';
 
 export default function ctrl(state, ctx) {
   const { g, a } = ctx;
 
   this.data = state;
 
-  this.play = new playCtrl(state, ctx);
+  this.play = new playCtrl(this, ctx);
 
-  this.over = new overCtrl(state, ctx);
+  this.over = new overCtrl(this, ctx);
+
+  this.screenshake = new shakeCtrl(this, ctx);
 
   const maybeUpdateGame = delta => {
     if (this.data.state === u.States.Play) {
@@ -88,6 +91,8 @@ export default function ctrl(state, ctx) {
   this.update = delta => {
     maybeUpdateGame(delta);
     maybeUpdateOver(delta);
+
+    this.screenshake.update(delta);
 
     this.data.game.tick += delta;
   };

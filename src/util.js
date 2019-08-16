@@ -34,6 +34,10 @@ export function clamp(v, min, max) {
   return Math.min(Math.max(v, min), max);
 }
 
+export function round(x) {
+  return Math.round(x * 100) / 100;
+}
+
 export function now() { return Date.now(); }
 
 export const ensureDelay = (start, fn, delay = 1000) => {

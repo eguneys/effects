@@ -15,6 +15,11 @@ export default function defaults() {
   return {
     debug: false,
     state: u.States.Over,
+    shake: {
+      angle: 0,
+      x: 0,
+      y: 0
+    },
     game: {
       score: 0,
       unit: gameUnit,

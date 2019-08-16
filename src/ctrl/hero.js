@@ -151,11 +151,19 @@ export default function hero(ctrl, { g, a }) {
     }
   };
 
+  const updateShake = delta => {
+    if (hero.active === 4 && !hero.audioEdge) {
+      const angle = Math.atan2(hero.vy, hero.vx);
+      ctrl.shake(angle);
+    }
+  };
+
   this.update = delta => {
     updatePos(delta);
     updateRotation(delta);
     updateEdgeMath(delta);
     updateCollision(delta);
+    updateShake(delta);
     updateAudio(delta);
     updateTicks(delta);
     updateTrail(delta);

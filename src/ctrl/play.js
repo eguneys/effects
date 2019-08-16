@@ -12,10 +12,10 @@ import defaults from '../state';
 
 import { collides, lineCollisionRange } from '../collision';
 
-export default function ctrl(state, ctx) {
+export default function ctrl(ctrl, ctx) {
   const { g, a } = ctx;
 
-  this.data = state;
+  this.data = ctrl.data;
   const { width, height } = this.data.game;
 
   this.hero = new makeHero(this, ctx);
@@ -113,6 +113,15 @@ export default function ctrl(state, ctx) {
       this.data.paddleBoost[0] = v[0];
     if (v[1] !== 0)
       this.data.paddleBoost[1] = v[1];
+  };
+
+  this.shake = (angle) => {
+    ctrl.screenshake.shake({
+      translate: 15,
+      rotate: 0.15,
+      xBias: Math.cos(angle),
+      yBias: Math.sin(angle) * -10
+    });
   };
 
 

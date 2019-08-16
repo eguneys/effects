@@ -334,6 +334,7 @@ export default function Graphics(state, ctx) {
     }
 
     imageData.data.set(buf8);
+    ctx.rotate(u.PI * 0.5);
     ctx.putImageData(imageData, 0, 0);
   };
 }
