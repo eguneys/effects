@@ -19,12 +19,6 @@ export default function ctrl(state, ctx) {
     if (this.data.state === u.States.Play) {
       this.play.update(delta);
     }
-    if (this.shouldResetGame) {
-      this.shouldResetGame = false;
-      this.play.reset();
-      this.data.gameover = 0;
-      this.data.state = u.States.Play;
-    }
   };
 
   const maybeUpdateOver = delta => {
@@ -37,13 +31,8 @@ export default function ctrl(state, ctx) {
     if (this.data.state === u.States.Play) {
       this.play.boost();
     } else {
-      if (this.data.gameover) {
-        u.ensureDelay(this.data.gameover, () => {
-          this.shouldResetGame = true;
-        });
-      } else {
-        this.shouldResetGame = true;
-      }
+      this.play.reset();
+      this.data.state = u.States.Play;
     }
   };
 

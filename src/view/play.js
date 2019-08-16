@@ -48,7 +48,7 @@ export default function view(ctrl, g) {
   }
 
   function renderBackground(ctrl, g) {
-    g.renderTarget = b.Background;
+    g.renderTarget = b.Midground;
 
     let rx0 = 0,
         rx1 = width / tileWidth,
@@ -64,7 +64,8 @@ export default function view(ctrl, g) {
 
         let tc = g.pget(x, y, b.Buffer);
 
-        g.fr(x, y, tileWidth, tileHeight, tc);
+        if (tc)
+          g.fr(x, y, tileWidth, tileHeight, tc);
       }
     }
   }
@@ -196,7 +197,11 @@ export default function view(ctrl, g) {
 
   function renderHero(ctrl, g) {
     g.renderTarget = b.Collision;
-    const { vx, vy, x, y, radius, rotation, color, active, tick } = ctrl.data.hero;
+    const { vx, vy, x, y, radius, rotation, color, active, tick, exploding } = ctrl.data.hero;
+
+    if (exploding) {
+      return;
+    }
     g.fillCircle(x, y, radius, color);
 
     const rC = Math.cos(rotation),

@@ -72,6 +72,7 @@ export default function defaults() {
     ],
     hero: {
       color: u.HERO_COLOR,
+      exploding: false,
       radius: gameUnit / 8,
       gap: 2,
       gapMove: 2,

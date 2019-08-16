@@ -44,13 +44,7 @@ export default function ctrl(ctrl, ctx) {
 
   const spotLife = () => u.rand(2, 5);
 
-  const blockHit = (hitBlock) => {
-    const { x, y, angle, color } = hitBlock.data;
-
-    this.hero.changeV(angle);
-
-    this.blocks.release(hitBlock);
-
+  const createExplosionSpots = (x, y, color) => {
     this.spots.create({x, y, color});
     if (u.rand(0,1)<0.5)
       this.spots.create({ x: x+20, y, life: spotLife(), color });
@@ -63,7 +57,17 @@ export default function ctrl(ctrl, ctx) {
     if (u.rand(0,1)<0.5)
       this.spots.create({ x, y: y + 20, life: spotLife(), color });
     if (u.rand(0,1)<0.5)
-      this.spots.create({ x, y: y - 20, life: spotLife(), color });
+      this.spots.create({ x, y: y - 20, life: spotLife(), color });    
+  };
+
+  const blockHit = (hitBlock) => {
+    const { x, y, angle, color } = hitBlock.data;
+
+    this.hero.changeV(angle);
+
+    this.blocks.release(hitBlock);
+
+    createExplosionSpots(x, y, color);
   };
 
   const maybeBoost = () => {
@@ -93,10 +97,22 @@ export default function ctrl(ctrl, ctx) {
     this.stars.create({ life: u.rand(0, 10) });
   }, 100);
 
+  const maybeEndPlay = delta => {
+    if (this.data.gameover > 0) {
+      u.ensureDelay(this.data.gameover, () => {
+        this.data.gameover = 0;
+        this.data.state = u.States.Over;
+      }, 1000);
+    }
+  };
+
   this.reset = () => {
-    this.data.hero.x = width / 2;
-    this.data.hero.y = height / 2;
-    this.data.game.score = 0;
+    const d = defaults();
+
+    this.data.hero = d.hero;
+    this.data.game = d.game;
+
+    this.hero.init(this.data.hero);
   };
 
   this.boost = () => {
@@ -104,9 +120,16 @@ export default function ctrl(ctrl, ctx) {
   };
 
   this.paddleHit = () => {
+
     if (!this.data.hero.inwards) {
+
+      this.hero.explode();
+
+      createExplosionSpots(this.data.hero.x,
+                           this.data.hero.y,
+                           3);
+
       this.data.gameover = u.now();
-      this.data.state = u.States.Over;
     }
   };
 
@@ -131,6 +154,7 @@ export default function ctrl(ctrl, ctx) {
     maybeBoost(delta);
     maybeSpawnBlock(delta);
     maybeSpawnStar(delta);
+    maybeEndPlay(delta);
     updateCollision(delta);
 
     this.hero.update(delta);

@@ -5,11 +5,14 @@ import * as c from '../collision';
 export default function hero(ctrl, { g, a }) {
   const { width, height } = ctrl.data.game;
 
-  const hero = ctrl.data.hero;
+  let hero;
 
-  const { radius } = hero;
+  this.init = (d) => {
+    hero = d;
+  };
 
   const updatePos = delta => {
+    const { radius } = hero;
 
     const k = hero.friction,
           d = 1,
@@ -149,6 +152,9 @@ export default function hero(ctrl, { g, a }) {
         a.playSound('sndSplode3');
       }
     }
+    if (hero.friction < 1) {
+      a.playSound('sndShield', 1, 0, 0.2);
+    }
   };
 
   const updateShake = delta => {
@@ -158,15 +164,23 @@ export default function hero(ctrl, { g, a }) {
     }
   };
 
+  const maybeUpdateTrailPos = delta => {
+    if (!hero.exploding) {
+      updatePos(delta);
+      updateTrail(delta);
+    }
+  };
+
+
   this.update = delta => {
-    updatePos(delta);
+    maybeUpdateTrailPos(delta);
+
     updateRotation(delta);
     updateEdgeMath(delta);
     updateCollision(delta);
     updateShake(delta);
     updateAudio(delta);
     updateTicks(delta);
-    updateTrail(delta);
     updateScore(delta);
   };
 
@@ -192,8 +206,13 @@ export default function hero(ctrl, { g, a }) {
     hero.active = 4;
   };
 
+  this.explode = () => {
+    hero.friction = 1;
+    hero.exploding = true;
+  };
+
   const paddleRangeIn = () => {
-    if (!hero.inwards) {
+    if (!hero.inwards && !hero.exploding) {
       hero.friction = 0.9;
     }
   };
