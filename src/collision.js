@@ -1,3 +1,5 @@
+import * as u from './util';
+
 export function collides(g, color, cr) {
   return cr((x, y) => {
     return g.pget(x, y, g.buffers.Collision) === color;
@@ -12,7 +14,7 @@ export function circleCollisionRange({ x, y, radius }) {
       let cx = x + c,
           cy = y + s;
 
-      if (collider(cx, cy)); {
+      if (collider(cx, cy)) {
         return { x: cx, y: cy };
       }
     }

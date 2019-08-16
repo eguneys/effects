@@ -3,6 +3,10 @@ export const States = {
   Over: 'over'
 };
 
+export const Colors = {
+  PaddleRange: 13
+};
+
 export const HERO_COLOR = 3;
 export const BLOCK_COLOR = 4;
 export const SPOT_COLOR = 1;

@@ -1,5 +1,7 @@
 import * as u from '../util';
 
+import * as c from '../collision';
+
 export default function hero(ctrl, { g, a }) {
   const { width, height } = ctrl.data.game;
 
@@ -9,8 +11,19 @@ export default function hero(ctrl, { g, a }) {
 
   const updatePos = delta => {
 
+    const k = hero.friction,
+          d = 1,
+          maxBrake = 1;
+
+    // https://stackoverflow.com/questions/57517033/how-to-calculate-velocity-based-on-acceleration-and-friction?noredirect=1#57517141
+    // hero.vx -= Math.sign(hero.ax) * Math.min(k / d, maxBrake) * delta * 0.001;
+    // hero.vy -= Math.sign(hero.ay) * Math.min(k / d, maxBrake) * delta * 0.001;
+
     hero.vx += hero.ax * delta * 0.001 * hero.boost;
     hero.vy += hero.ay * delta * 0.001 * hero.boost;
+
+    hero.vx *= k;
+    hero.vy *= k;
 
     hero.x += hero.vx;
     hero.y += hero.vy;
@@ -54,6 +67,18 @@ export default function hero(ctrl, { g, a }) {
     hero.rotation = hero.rotation % u.TAU;
   };
 
+  const updateCollision = delta => {
+    const hitPaddleRange = c.collides(g,
+                                      u.Colors.PaddleRange,
+                                      c.circleCollisionRange(hero));
+
+    if (hitPaddleRange) {
+      paddleRangeIn();
+    } else {
+      paddleRangeOut();
+    }
+  };
+
   const updateTicks = delta => {
     hero.tick += delta;
 
@@ -93,6 +118,7 @@ export default function hero(ctrl, { g, a }) {
   this.update = delta => {
     updatePos(delta);
     updateRotation(delta);
+    updateCollision(delta);
     updateAudio(delta);
     updateTicks(delta);
     updateTrail(delta);
@@ -119,5 +145,12 @@ export default function hero(ctrl, { g, a }) {
     hero.ax = u.clamp(nV[0] * 2, -1, 1);
     hero.ay = u.clamp(nV[1] * 2, -1, 1);
     hero.active = 4;
+  };
+
+  const paddleRangeIn = () => {
+    hero.friction = 0.9;
+  };
+  const paddleRangeOut = () => {
+    hero.friction = 1;
   };
 }

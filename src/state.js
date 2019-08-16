@@ -13,7 +13,7 @@ export default function defaults() {
   const paddleWidth = gameUnit;
 
   return {
-    debug: true,
+    debug: false,
     state: u.States.Over,
     game: {
       score: 0,
@@ -79,6 +79,7 @@ export default function defaults() {
       vy: 0,
       rotation: 0,
       boost: 1,
+      friction: 1,
       tick: 0,
       active: 0
     }

@@ -29,18 +29,22 @@ export default function paddles(ctrl, g) {
     }
   };
 
+  const mapCollision = _ => ({
+    e: _,
+    c: collides(g,
+                u.HERO_COLOR,
+                rectCollisionRange(_))
+  });
+
   const updateCollision = delta => {
-    const hitPaddle = paddles.map(_ => ({
-      e: _,
-      c: collides(g,
-                  u.HERO_COLOR,
-                  rectCollisionRange(_))
-    })).find(_ => !!_.c);
+
+    const hitPaddle = paddles
+          .map(mapCollision)
+          .find(_ => !!_.c);
 
     if (hitPaddle) {
-      // ctrl.paddleHit();
+      ctrl.paddleHit();
     }
-
   };
 
   this.update = delta => {

@@ -151,12 +151,9 @@ function makeBlock(ctrl) {
 }
 
 const spotColor = () => u.randItem([
-  11,
-  21,
-  54,
-  42,
-  29,
-  18
+  18,
+  20,
+  5
 ]);
 
 const withDelay = (fn, delay, updateFn) => {

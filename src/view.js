@@ -34,7 +34,7 @@ export default function view(ctrl, g) {
 
     g.renderSource = b.Collision;
     g.renderTarget = b.Screen;
-    //g.spr();
+    // g.spr();
 
     g.renderSource = b.Ui;
     g.renderTarget = b.Screen;
