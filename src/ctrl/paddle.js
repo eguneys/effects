@@ -42,7 +42,7 @@ export default function paddles(ctrl, g) {
           .map(mapCollision)
           .find(_ => !!_.c);
 
-    if (hitPaddle) {
+    if (hitPaddle && ! ctrl.data.debug) {
       ctrl.paddleHit();
     }
   };

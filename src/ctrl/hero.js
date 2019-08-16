@@ -67,6 +67,42 @@ export default function hero(ctrl, { g, a }) {
     hero.rotation = hero.rotation % u.TAU;
   };
 
+  const updateEdgeMath = delta => {
+    
+    const { x, y } = hero;
+    
+    let dX, dY;
+    let closeXAxis,
+        closeYAxis,
+        closeEdge;
+
+    if (x < width / 2) {
+      dX = x;
+      closeXAxis = [0, 1];
+    } else {
+      dX = width - x;
+      closeXAxis = [0, -1];
+    }
+
+    if (y < height / 2) {
+      dY = y;
+      closeYAxis = [1, 0];
+    } else {
+      dY = height - y;
+      closeYAxis = [-1, 0];
+    }
+
+    if (dX < dY) {
+      hero.closestEdge = closeXAxis;
+    } else {
+      hero.closestEdge = closeYAxis;
+    }
+
+
+    hero.inwards = Math.sign(
+      cross(hero.closestEdge, [hero.vx, hero.vy])) === 1;
+  };
+
   const updateCollision = delta => {
     const hitPaddleRange = c.collides(g,
                                       u.Colors.PaddleRange,
@@ -118,6 +154,7 @@ export default function hero(ctrl, { g, a }) {
   this.update = delta => {
     updatePos(delta);
     updateRotation(delta);
+    updateEdgeMath(delta);
     updateCollision(delta);
     updateAudio(delta);
     updateTicks(delta);
@@ -148,9 +185,15 @@ export default function hero(ctrl, { g, a }) {
   };
 
   const paddleRangeIn = () => {
-    hero.friction = 0.9;
+    if (!hero.inwards) {
+      hero.friction = 0.9;
+    }
   };
   const paddleRangeOut = () => {
     hero.friction = 1;
   };
 }
+
+const cross = (v1, v2) => {
+  return v1[0] * v2[1] + v1[1] * v2[0];
+};

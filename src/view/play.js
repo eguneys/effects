@@ -81,9 +81,9 @@ export default function view(ctrl, g) {
 
 
   function renderPaddleForce(ctrl, g) {
-    const { vx, vy, x, y, friction, active } = ctrl.data.hero;
+    const { vx, vy, x, y, friction } = ctrl.data.hero;
 
-    if (friction >= 1 || active > 0) {
+    if (friction >= 1) {
       return;
     }
 
