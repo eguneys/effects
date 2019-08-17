@@ -1,33 +1,52 @@
-export default function colors(ctrl) {
-  const { ctx } = ctrl;
-  const { unit, width, height } = ctrl.data.game;
+import * as convert from './rgba';
 
-  const vignetteGradient = ctx.createRadialGradient(
-    width / 2,
-    height / 2,
-    0,
-    width / 2,
-    height / 2,
-    height);
+export const Palette = {
+  Blue: 0xff0000ff
+};
 
-  vignetteGradient.addColorStop(0, 'hsla(0, 0%, 20%, 0.5)');
-  vignetteGradient.addColorStop(1, 'hsla(0, 0%, 0%, 0.5)');
+export const arr = rgba => {
+  const a = (rgba & 0xff000000) >>> 24,
+        r = (rgba & 0x00ff0000) >>> 16,
+        g = (rgba & 0x0000ff00) >>> 8,
+        b = (rgba & 0x000000ff);
 
+  return [r, g, b, a];
+};
 
-  const heroGradientSize = unit;
-  const heroGradient = ctx.createRadialGradient(
-    heroGradientSize / 2,
-    heroGradientSize / 2,
-    0,
-    heroGradientSize / 2,
-    heroGradientSize / 2,
-    heroGradientSize / 2);
-  heroGradient.addColorStop(0, 'hsla(0, 0%, 100%, 0.4)');
-  heroGradient.addColorStop(1, 'hsla(0, 0%, 100%, 0)');
+export const fromArr = ([r, g, b, a]) => {
+  return (a << 24) | (r << 16) | (g << 8) | b;
+};
+
+export const hsla = rgba => {
+  const [r, g, b, a] = arr(rgba),
+        [h, s, l] = convert.rgbToHsl(r, g, b);
   
+  return [h, s, l, a];
+};
+
+export const hslToRgba = (h, s, l, a) => {
+  const [r, g, b] = convert.hslToRgb(h, s, l);
+  return fromArr([r, g, b, a]);
+};
+
+export const css = rgba => {
+  const [r, g, b, a] = arr(rgba);
+
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+};
+
+export function shifter(rgba) {
+  const [h, s, l, a] = hsla(rgba);
+
+  // https://stackoverflow.com/a/57539098/3994249
+  function shift(a, b) {
+    let r = (a + b);
+    return r === 1 ? 1 : r % 1;
+  }
+
   return {
-    vignetteGradient,
-    heroGradient,
-    heroGradientSize
+    hue: (dv) => hslToRgba(shift(h, dv), s, l, a),
+    sat: (dv) => hslToRgba(h, shift(s, dv), l, a),
+    lum: (dv) => hslToRgba(h, s, shift(l, dv) % 1, a)
   };
 }
