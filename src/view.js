@@ -18,8 +18,27 @@ export default function view(ctrl, g) {
   };
 
   function waterfall(ctrl, g) {
-    const w = width * 0.2,
-          h = w;
+    const { tick } = ctrl.data.game;
+
+    const n = 10;
+
+    const wX = width * 0;
+    const wWidth = width * (1/n);
+
+    for (let i = 0; i < n; i++) {
+      drop(ctrl, {
+        x: wX + i * wWidth,
+        y: 0,
+        w: wWidth,
+        h: wWidth,
+        phase: i,
+        n
+      }, g);
+    }
+  }
+
+  function drop(ctrl, drop, g) {
+    const { n, x, y, w, h, phase } = drop;
 
     const { tick } = ctrl.data.game;
 
@@ -27,14 +46,20 @@ export default function view(ctrl, g) {
 
     g.raw(ctx => {
 
-      const t = u.floor((tick * 0.01) % 10);
+      const t = Math.floor(tick * 0.01);
 
-      for (let i = 0; i < 10; i++) {
-        let c = ((10 - i + t) % 10) / 10;
+      const res = [];
+
+      for (let i = 0; i < n; i++) {
+        let ip = (n - i + phase + t) % n;
+        let ii = (ip > (n / 2) ? n - ip:ip);
+        let c = ((ii) % n) / n;
+        res.push(c);
         ctx.fillStyle = colors.css(shifter.lum(c));
-        ctx.fillRect((width - w) / 2, i * h, w, h);
+        ctx.fillRect(x, y + i * h, w, h);
       }
-
+      if (phase === 9)
+      console.log(res);
     });
   }
 

@@ -24,7 +24,7 @@ export function app(element, options) {
     ctrl.update(delta);
     view.render(ctrl);
     graphics.render();
-  }, 30).start();
+  }, 50).start();
 
   canvas.width = state.game.width;
   canvas.height = state.game.height;

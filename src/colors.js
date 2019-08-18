@@ -13,8 +13,9 @@ export const arr = rgba => {
   return [r, g, b, a];
 };
 
+// https://stackoverflow.com/a/54030756/3994249
 export const fromArr = ([r, g, b, a]) => {
-  return (a << 24) | (r << 16) | (g << 8) | b;
+  return ((a << 24 >>> 0) | (r << 16 >>> 0) | (g << 8 >>> 0) | b) >>> 0;
 };
 
 export const hsla = rgba => {
@@ -47,6 +48,6 @@ export function shifter(rgba) {
   return {
     hue: (dv) => hslToRgba(shift(h, dv), s, l, a),
     sat: (dv) => hslToRgba(h, shift(s, dv), l, a),
-    lum: (dv) => hslToRgba(h, s, shift(l, dv) % 1, a)
+    lum: (dv) => hslToRgba(h, s, shift(l, dv), a)
   };
 }
