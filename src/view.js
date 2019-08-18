@@ -1,18 +1,20 @@
 import * as u from './util';
 
-import * as colors from './colors';
+import playView from './view/play';
 
 
 export default function view(ctrl, g) {
 
   const { width, height } = ctrl.data.game;
 
-  const pal = colors.Palette;
+  const play = new playView(ctrl, g);
+
 
   this.render = ctrl => {
 
     clear();
 
+    play.render(ctrl);
   };
 
   function clear() {
