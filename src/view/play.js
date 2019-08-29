@@ -20,7 +20,7 @@ export default function view(ctrl, g) {
 
     const { x,
             y,
-            size } = project(star);
+            size } = project(ctrl.camera, star);
 
     g.raw(ctx => {
       ctx.beginPath();
@@ -30,10 +30,12 @@ export default function view(ctrl, g) {
 
   }
 
-  function project(obj) {
-    const { projCenterX,
-            projCenterY } = obj;
-    const { fov, x, y, z } = obj;
+  function project(camera, obj) {
+    const { fov,
+            projCenterX,
+            projCenterY } = camera;
+
+    const { x, y, z } = obj;
 
     const sizeProjected = fov / (fov + z),
           xProjected = x * sizeProjected + projCenterX,

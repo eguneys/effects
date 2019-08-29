@@ -10,11 +10,6 @@ export default function star(ctrl) {
     this.data = { ...defaults(), ...d };
 
     this.vz = u.PI * 0.1;
-
-    this.fov = width * 0.8;
-    this.projCenterX = width * 0.5;
-    this.projCenterY = height * 0.5;
-
   };
 
   const updatePos = delta => {
@@ -22,11 +17,11 @@ export default function star(ctrl) {
     this.data.theta += this.vz * delta * 0.01;
     this.data.theta = this.data.theta % u.TAU;
 
-    const { phi, theta } = this.data;
+    const { x, y, z, phi, theta } = this.data;
 
-    this.x = globeRadius * Math.sin(phi) * Math.cos(theta),
-    this.y = globeRadius * Math.cos(phi),
-    this.z = globeRadius * Math.sin(phi) * Math.sin(theta) + globeRadius;
+    this.x = x + globeRadius * Math.sin(phi) * Math.cos(theta),
+    this.y = y + globeRadius * Math.cos(phi),
+    this.z = z + globeRadius * Math.sin(phi) * Math.sin(theta) + globeRadius;
 
   };
 
@@ -38,5 +33,8 @@ export default function star(ctrl) {
 const defaults = () => ({
   theta: 0,
   phi: 0,
-  radius: 10
+  radius: 10,
+  x: 0,
+  y: 0,
+  z: 0
 });
